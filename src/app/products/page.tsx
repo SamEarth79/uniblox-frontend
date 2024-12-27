@@ -9,7 +9,52 @@ const Loading = () => (
     </div>
 )
 
-const ProductCard = ({product}) => {
+type CartProps = {
+    product_id: number,
+    qty: number,
+}
+
+type ProductProps = {
+    product_id: number,
+    product_name: string,
+    product_description: string,
+    product_price: number,
+}
+
+const ProductCard = ({product, cart, setCart} : {product: ProductProps, cart: CartProps[], setCart: any}) => {
+    
+    const cartItem = cart.find((item: CartProps) => item.product_id === product.product_id);
+    const addToCart = () => {
+        setCart((prev:[CartProps]) => [
+            ...prev,
+            {
+                product_id: product.product_id,
+                qty: 1,
+            }
+        ])
+    }
+
+    const increaseQty = () => {
+        setCart((prev:[CartProps]) => 
+            prev.map((item: CartProps) => 
+                item.product_id === product.product_id ? {...item, qty: item.qty + 1} : item
+            )
+        )
+    }
+
+    const decreaseQty = () => {
+        setCart((prev:[CartProps]) => {
+            const qty = cartItem?.qty;
+            if(qty === 1){
+                return prev.filter((item: CartProps) => item.product_id !== product.product_id)
+            }
+            return prev.map((item: CartProps) => 
+                item.product_id === product.product_id ? {...item, qty: item.qty - 1} : item
+            )
+        }
+        )
+    }
+    
     return (
         <div className="flex flex-col w-[14em]">
             <div className="w-full flex items-center justify-center">
@@ -28,19 +73,39 @@ const ProductCard = ({product}) => {
                 </div>
                 <div className="flex-[1] font-extrabold text-lg">${product.product_price}</div>
             </div>
-            <div className="">
-                <button 
-                    className="bg-gradient-to-r from-violet-400 to-blue-400 text-white font-bold py-1 w-20 rounded-md"
-                >
-                    Add
-                </button>
+            <div className="text-lg">
+                {cartItem ?
+                    <div className="flex justify-between w-20 border border-blue-900 rounded-md cursor-pointer">
+                        <div 
+                            className='bg-blue-900 flex-1 text-center text-white'
+                            onClick={decreaseQty}
+                        >
+                            -
+                        </div>
+                        <div className="flex-1 text-center">{cartItem.qty}</div>
+                        <div 
+                            className='bg-blue-900 flex-1 text-center text-white'
+                            onClick={increaseQty}
+                        >
+                            +
+                        </div>
+                    </div> 
+                    :
+                    <button 
+                        className="bg-gradient-to-r from-violet-400 to-blue-400 text-white font-bold py-1 w-20 rounded-md"
+                        onClick={addToCart}
+                    >
+                        Add
+                    </button>
+                }
             </div>
         </div>
     )
 }
 
 const Products = () => {
-    const [products, setProducts] = useState([]);
+    const [products, setProducts] = useState<ProductProps[]>([]);
+    const [cart, setCart] = useState<CartProps[]>([]);
     const [loading, setLoading] = useState(true);
     
     useEffect(() => {
@@ -60,8 +125,14 @@ const Products = () => {
             <h1 className="text-3xl font-bold">Products For You!</h1>
             <div className="flex w-full gap-4 flex-wrap py-10">
                 {products.map((product, index) => {
+                    
                     return (
-                        <ProductCard product={product} key={index}/>
+                        <ProductCard 
+                            key={index}
+                            product={product}
+                            cart={cart}
+                            setCart={setCart}
+                        />
                     )
                 })}
             </div>

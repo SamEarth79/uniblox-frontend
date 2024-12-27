@@ -5,7 +5,7 @@ class Backend {
         this.baseUrl = "http://127.0.0.1:8000/";
     }
 
-    async makeApiCall(endpoint: string, method: string, data?: any){
+    async makeApiCall(endpoint: string, method: string, data?: object){
         try {
             const url = `${this.baseUrl}${endpoint}`;
             const res = await fetch(url, {
