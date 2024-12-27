@@ -3,7 +3,7 @@ import React from 'react'
 
 const Header = () => {
     return (
-        <div className="flex justify-between items-center py-4 px-16 shadow-lg bg-[#FAFAFA]">
+        <div className="flex justify-between items-center py-4 px-16 shadow-lg bg-[#FAFAFA] sticky top-0">
             <div className="flex gap-4 items-center">
                 <Image 
                     src="https://www.uniblox.io/static/media/Uniblox.6851390702e3650378b97c30afcd230b.svg"
