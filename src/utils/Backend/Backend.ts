@@ -15,7 +15,7 @@ class Backend {
                 },
                 body: JSON.stringify(data),
             });
-            return res.json();
+            return res;
         } catch (error) {
             console.error(error);
             throw new Error(`API call to ${endpoint} failed`);
