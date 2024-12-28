@@ -47,3 +47,19 @@ export const Checkout = async (cart: CartProps[], discount: DiscountProps|null,)
         return Promise.reject(error);
     }
 }
+
+export const GetOrders = async () => {
+    try{
+        const backend = new Backend();
+        const response = await backend.makeApiCall(
+            "orders/", 
+            "GET", 
+        );
+        const data = await response.json()
+        console.log(data);
+        return Promise.resolve(data);
+    } catch (error) {
+        console.error(error);
+        return Promise.reject(error);
+    }
+}

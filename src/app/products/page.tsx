@@ -113,7 +113,7 @@ const ProductCard = ({product, cart, setCart} : {product: ProductProps, cart: Ca
     )
 }
 
-const OrderSummary = ({cart, subtotal, resetCart, discount} : {cart: CartProps[], subtotal: number, resetCart: any, discount: DiscountProps}) => {
+const OrderSummary = ({cart, subtotal, resetCart, discount} : {cart: CartProps[], subtotal: number, resetCart: any, discount: DiscountProps|null}) => {
     
     const [discountApplied, setDiscountApplied] = useState(false);
 
@@ -165,7 +165,7 @@ const OrderSummary = ({cart, subtotal, resetCart, discount} : {cart: CartProps[]
                     <p className="text-sm font-semibold">₹{subtotal}</p>
                 </div>
                 {
-                    discountApplied && 
+                    (discountApplied && discount) && 
                     <>
                         <div className="flex w-full justify-between items-center">
                             <h3 className="text-base font-semibold">Discount</h3>

@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import React from 'react'
 
 const Header = () => {
@@ -12,8 +13,9 @@ const Header = () => {
                 <h1 className="text-2xl font-extrabold">Uniblox</h1>
             </div>
             <ul className="flex gap-8">
-                <li className='p-2 font-light text-lg cursor-pointer hover:-translate-y-1 transition-all'>Products</li>
-                <li className='p-2 font-light text-lg cursor-pointer hover:-translate-y-1 transition-all'>Admin</li>
+                <Link href="/products"><li className='p-2 font-light text-lg cursor-pointer hover:-translate-y-1 transition-all'>Products</li></Link>
+                <Link href="/orders"><li className='p-2 font-light text-lg cursor-pointer hover:-translate-y-1 transition-all'>Orders</li></Link>
+                <Link href="/admin"><li className='p-2 font-light text-lg cursor-pointer hover:-translate-y-1 transition-all'>Admin</li></Link>
             </ul>
         </div>
     )
