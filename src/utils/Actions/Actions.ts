@@ -1,4 +1,4 @@
-import { CartProps } from "@/app/products/page";
+import { CartProps, DiscountProps } from "@/app/products/page";
 import Backend from "../Backend/Backend"
 
 export const GetProducts = async () => {
@@ -9,14 +9,16 @@ export const GetProducts = async () => {
             "products/", 
             "GET", 
         );
-        return Promise.resolve(response.json());
+        const data = await response.json()
+        console.log(data);
+        return Promise.resolve(data);
     } catch (error) {
         console.error(error);
         return Promise.reject(error);
     }
 }
 
-export const Checkout = async (cart: CartProps[]) => {
+export const Checkout = async (cart: CartProps[], discount: DiscountProps|null,) => {
     try {
 
         const new_order_data = cart.map(item => {
@@ -26,11 +28,16 @@ export const Checkout = async (cart: CartProps[]) => {
             }
         })
 
+        const payload = {
+            "new_order_data": new_order_data,
+            "discount": discount
+        }
+
         const backend = new Backend();
         const response = await backend.makeApiCall(
             "orders/",
             "POST",
-            {new_order_data}
+            payload
         );
         if(response.status === 201)
             return Promise.resolve();

@@ -4,11 +4,7 @@ import Image from 'next/image';
 import React, { useEffect, useMemo, useState } from 'react'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
-const Loading = () => (
-    <div className="flex justify-center items-center h-full">
-        Loading...
-    </div>
-)
+
 
 export type CartProps = {
     qty: number,
@@ -21,6 +17,20 @@ export type ProductProps = {
     product_price: number,
     product_image: string,
 }
+
+export type DiscountProps = {
+    discount_id: number,
+    discount_code: string,
+    user_id: number,
+    discount_percentage: number,
+    status: boolean,
+}
+
+const Loading = () => (
+    <div className="flex justify-center items-center h-full">
+        Loading...
+    </div>
+)
 
 const ProductCard = ({product, cart, setCart} : {product: ProductProps, cart: CartProps[], setCart: any}) => {
     
@@ -103,8 +113,10 @@ const ProductCard = ({product, cart, setCart} : {product: ProductProps, cart: Ca
     )
 }
 
-const OrderSummary = ({cart, subtotal, resetCart} : {cart: CartProps[], subtotal: number, resetCart: any}) => {
+const OrderSummary = ({cart, subtotal, resetCart, discount} : {cart: CartProps[], subtotal: number, resetCart: any, discount: DiscountProps}) => {
     
+    const [discountApplied, setDiscountApplied] = useState(false);
+
     if(cart.length === 0){
         return (
             <div className="w-[33%] bg-[#FAFAFA] p-4 rounded-xl h-fit px-4">
@@ -134,19 +146,46 @@ const OrderSummary = ({cart, subtotal, resetCart} : {cart: CartProps[], subtotal
                         </div>
                 )})}
             </div>
+            <div className="flex flex-col items-center justify-center gap-4 my-[-2em] mx-auto py-2 px-4 rounded-lg">
+                {discount && 
+                    <div className='flex items-center justify-between w-full'>
+                        <p>Get {discount.discount_percentage}% off using {discount.discount_code}</p>
+                        <button 
+                            className='font-bold text-violet-500 p-2'
+                            onClick={() => setDiscountApplied(!discountApplied)}
+                        >
+                            {discountApplied ? `Remove` : `Apply`}
+                        </button>
+                    </div>
+                }
+            </div>
             <div className="flex flex-col items-center justify-center gap-4 my-10 mx-auto py-2 px-4 rounded-lg bg-[#e9e1f2]">
                 <div className="flex w-full justify-between items-center">
-                    <h3 className="text-base font-semibold">Total</h3>
+                    <h3 className="text-base font-semibold">{discountApplied ? `Sub Total` : `Total`}</h3>
                     <p className="text-sm font-semibold">₹{subtotal}</p>
-                </div> 
+                </div>
+                {
+                    discountApplied && 
+                    <>
+                        <div className="flex w-full justify-between items-center">
+                            <h3 className="text-base font-semibold">Discount</h3>
+                            <p className="text-sm font-semibold">-₹{subtotal * discount.discount_percentage / 100}</p>
+                        </div>
+                        <div className="flex w-full justify-between items-center">
+                            <h3 className="text-base font-semibold">Total</h3>
+                            <p className="text-sm font-semibold">₹{subtotal - (subtotal * discount.discount_percentage / 100)}</p>
+                        </div>
+                    </>
+                }
             </div>
             <button 
                 className="bg-[#e9e1f2] mx-auto rounded-lg p-2 w-full text-xl font-semibold flex items-center gap-2 justify-center"
                 onClick={() => {
-                    Checkout(cart)
+                    Checkout(cart, discountApplied ? discount : null)
                     .then(()=>{
                         resetCart();
                         alert("Order Placed Successfully!")
+                        window.location.reload();           // This is a temporary solution to refresh the page after checkout, we can use redux to fetch and update the products and discounts
                     })
                     .catch(()=>{alert("Order Failed!")})
                 }}
@@ -161,13 +200,15 @@ const OrderSummary = ({cart, subtotal, resetCart} : {cart: CartProps[], subtotal
 
 const Products = () => {
     const [products, setProducts] = useState<ProductProps[]>([]);
+    const [discount, setDiscount] = useState<DiscountProps|null>(null);
     const [cart, setCart] = useState<CartProps[]>([]);
     const [loading, setLoading] = useState(true);
     
     useEffect(() => {
         GetProducts()
         .then(response => {
-            setProducts(response);
+            setProducts(response.products);
+            setDiscount(response.discount);
             setLoading(false);
         })
     }, []);
@@ -200,6 +241,7 @@ const Products = () => {
                     cart={cart} 
                     subtotal={subtotal} 
                     resetCart={() => setCart([])}
+                    discount={discount}
                 />
             </div>
 
