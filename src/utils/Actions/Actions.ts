@@ -63,3 +63,19 @@ export const GetOrders = async () => {
         return Promise.reject(error);
     }
 }
+
+export const GetAdminOrders = async () => {
+    try{
+        const backend = new Backend();
+        const response = await backend.makeApiCall(
+            "adminorders/", 
+            "GET", 
+        );
+        const data = await response.json()
+        console.log(data);
+        return Promise.resolve(data);
+    } catch (error) {
+        console.error(error);
+        return Promise.reject(error);
+    }
+}
