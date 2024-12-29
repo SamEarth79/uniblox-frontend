@@ -97,7 +97,7 @@ const ProductCard = ({product, cart, setCart} : {product: ProductProps, cart: Ca
 
 const Products = () => {
     const [products, setProducts] = useState<ProductProps[]>([]);
-    const [discount, setDiscount] = useState<DiscountProps|null>(null);
+    const [availableDiscounts, setAvailableDiscounts] = useState<string[]>([]);
     const [cart, setCart] = useState<CartProps[]>([]);
     const [loading, setLoading] = useState(true);
     
@@ -105,7 +105,7 @@ const Products = () => {
         GetProducts()
         .then(response => {
             setProducts(response.products);
-            setDiscount(response.discount);
+            setAvailableDiscounts(response.discount);
             setLoading(false);
         })
     }, []);
@@ -138,7 +138,7 @@ const Products = () => {
                     cart={cart} 
                     subtotal={subtotal} 
                     resetCart={() => setCart([])}
-                    discount={discount}
+                    availableDiscounts={availableDiscounts}
                 />
             </div>
 

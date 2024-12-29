@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
-export const OrderSummary = ({cart, subtotal, resetCart} : {cart: CartProps[], subtotal: number, resetCart: any}) => {
+export const OrderSummary = ({cart, subtotal, resetCart, availableDiscounts} : {cart: CartProps[], subtotal: number, resetCart: any, availableDiscounts: string[]}) => {
     
     const [discountCode, setDiscountCode] = useState('');
     const [discount, setDiscount] = useState<DiscountProps|null>(null);
@@ -39,6 +39,10 @@ export const OrderSummary = ({cart, subtotal, resetCart} : {cart: CartProps[], s
                 )})}
             </div>
             <div className="flex flex-col items-center justify-center gap-4 my-[-2em] mx-auto py-3 rounded-lg">
+                {availableDiscounts.length > 0 &&
+                    <p className="text-sm font-light text-left">Hurray! We have some discount codes for you! <br />
+                    Use either {availableDiscounts.map((discount, index)=>(<span key={index}>{discount}, </span>))} to get some off</p>
+                }
                 <div className='flex items-center justify-between w-full gap-4'>
                     <input 
                         type="text" 
