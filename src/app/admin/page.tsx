@@ -1,5 +1,7 @@
 "use client";
+import AdminDiscounts from '@/components/AdminDiscounts/AdminDiscounts';
 import AdminOrders from '@/components/AdminOrders/AdminOrders';
+import AdminProducts from '@/components/AdminProducts/AdminProducts';
 import React, { useState } from 'react'
 
 enum Section {
@@ -26,6 +28,8 @@ const Admin = () => {
         <div>
             <AdminHeader />
             {section === Section.Orders && <AdminOrders />}
+            {section === Section.Products && <AdminProducts />}
+            {section === Section.Discounts && <AdminDiscounts />}
         </div>
     )
 }

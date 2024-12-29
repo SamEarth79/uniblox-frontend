@@ -79,3 +79,55 @@ export const GetAdminOrders = async () => {
         return Promise.reject(error);
     }
 }
+
+export const GetAdminProducts = async () => {
+    try{
+        const backend = new Backend();
+        const response = await backend.makeApiCall(
+            "adminproducts/", 
+            "GET", 
+        );
+        const data = await response.json()
+        console.log(data);
+        return Promise.resolve(data);
+    } catch (error) {
+        console.error(error);
+        return Promise.reject(error);
+    }
+}
+
+export const GetAdminDiscounts = async () => {
+    try{
+        const backend = new Backend();
+        const response = await backend.makeApiCall(
+            "admindiscounts/", 
+            "GET", 
+        );
+        const data = await response.json()
+        console.log(data);
+        return Promise.resolve(data);
+    } catch (error) {
+        console.error(error);
+        return Promise.reject(error);
+    }
+}
+
+export const CheckCouponCode = async (couponCode:string) => {
+    try{
+        const backend = new Backend();
+        const response = await backend.makeApiCall(
+            `discounts?couponCode=${couponCode}`, 
+            "GET", 
+        );
+        if(response.status===200){
+            const data = await response.json()
+            console.log(data);
+            return Promise.resolve(data);
+        }else{
+            return Promise.reject();
+        }
+    } catch (error) {
+        console.error(error);
+        return Promise.reject(error);
+    }
+}

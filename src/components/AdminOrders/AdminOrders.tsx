@@ -33,7 +33,7 @@ const AdminOrders = () => {
                         <th>Product Price</th>
                         <th>Order Qty</th>
                         <th>Order Total</th>
-                        <th>Transaction Id</th>
+                        <th>Transaction #</th>
                     </tr>
                 </thead>
                 <tbody>
