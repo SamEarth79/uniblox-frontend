@@ -32,6 +32,8 @@ const AdminOrders = () => {
                         <th>Product Name</th>
                         <th>Product Price</th>
                         <th>Order Qty</th>
+                        <th>Sub Total</th>
+                        <th>Discount Percentage</th>
                         <th>Order Total</th>
                         <th>Transaction #</th>
                     </tr>
@@ -46,6 +48,12 @@ const AdminOrders = () => {
                             <td>{order.product_price}</td>
                             <td>{order.order_qty}</td>
                             <td>{order.product_price*order.order_qty}</td>
+                            <td>{order.discount_percentage}</td>
+                            <td>{
+                                order.discount_percentage ? 
+                                order.product_price*order.order_qty - (order.product_price*order.order_qty * order.discount_percentage / 100) :
+                                order.product_price*order.order_qty   
+                            }</td>
                             <td>{order.transaction_id}</td>
                         </tr>
                     ))}

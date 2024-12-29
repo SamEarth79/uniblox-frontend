@@ -1,5 +1,5 @@
 import { CartProps, DiscountProps } from "@/types/types";
-import { CheckCouponCode, Checkout } from "@/utils/Actions/Actions";
+import { CheckDiscountCode, Checkout } from "@/utils/Actions/Actions";
 import Image from "next/image";
 import { useState } from "react";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
@@ -57,7 +57,7 @@ export const OrderSummary = ({cart, subtotal, resetCart} : {cart: CartProps[], s
                                 setDiscount(null);
                                 return;
                             }
-                            CheckCouponCode(discountCode)
+                            CheckDiscountCode(discountCode)
                             .then(discount => {
                                 setDiscount(discount);
                             }).catch(()=>{alert("Invalid Coupon Code!")})

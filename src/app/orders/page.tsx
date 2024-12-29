@@ -36,9 +36,19 @@ const OrderCard = ({order} : {order: any}) => {
                     ))}
                 </ul>
             </div>
-            <div className="flex items-center justify-end gap-2">
-                <h3>Total</h3>
-                <p className='text-2xl font-semibold'>₹{order.order_total}</p>
+            <div className="flex gap-8 items-center justify-end">
+                {order.discount?.discount_percentage && <div className="flex items-center gap-2">
+                    <h3>Discount</h3>
+                    <p className='text-2xl font-semibold'>{order.discount?.discount_percentage}%</p>
+                </div>}
+                <div className="flex items-center  gap-2">
+                    <h3>Total</h3>
+                    <p className='text-2xl font-semibold'>₹{
+                        order.discount?.discount_percentage ? 
+                        order.order_total - (order.order_total * order.discount.discount_percentage / 100) :
+                        order.order_total
+                    }</p>
+                </div>
             </div>
         </div>
     )

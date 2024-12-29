@@ -112,7 +112,7 @@ export const GetAdminDiscounts = async () => {
     }
 }
 
-export const CheckCouponCode = async (couponCode:string) => {
+export const CheckDiscountCode = async (couponCode:string) => {
     try{
         const backend = new Backend();
         const response = await backend.makeApiCall(
@@ -123,6 +123,25 @@ export const CheckCouponCode = async (couponCode:string) => {
             const data = await response.json()
             console.log(data);
             return Promise.resolve(data);
+        }else{
+            return Promise.reject();
+        }
+    } catch (error) {
+        console.error(error);
+        return Promise.reject(error);
+    }
+}
+
+export const CreateDiscount = async (discount: DiscountProps) => {
+    try{
+        const backend = new Backend();
+        const response = await backend.makeApiCall(
+            "discounts/", 
+            "POST",
+            discount
+        );
+        if(response.status===201){
+            return Promise.resolve();
         }else{
             return Promise.reject();
         }
